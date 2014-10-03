@@ -1,0 +1,209 @@
+ 
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Calculator</title>
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.1.1/css/bootstrap.min.css">
+</head>
+<body>
+
+
+  <div class="container">
+    <h1>Calculator</h1>
+    <hr />
+	<label id="answer">Answer</label>
+    <div class="page"></div>
+  </div>
+
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js" type="text/javascript"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js"></script>
+
+  <script type="text/template" id="new-calc-template">
+   
+    <hr />
+	
+    <table class="table striped">
+     
+      <tbody>
+       
+			<tr>
+            <td ><a href="#/num" class="btn btn-primary" onclick="myFunction(1)">1</a></td>
+            <td><a href="#/num" class="btn btn-primary" onclick="myFunction(2)">2</a></td>
+            <td><a href="#/num" class="btn btn-primary" onclick="myFunction(3)">3</a></td> 
+            <td><a href="#/+" class="btn btn-primary">+</a></td> 
+			<td><a href="#/X" class="btn btn-primary">X</a></td> 
+			</tr>
+			<tr>
+			<td><a href="#/num" class="btn btn-primary" onclick="myFunction(4)">4</a></td>
+            <td><a href="#/num" class="btn btn-primary" onclick="myFunction(5)">5</a></td>
+            <td><a href="#/num" class="btn btn-primary" onclick="myFunction(6)">6</a></td> 
+			<td><a href="#/-" class="btn btn-primary">-</a></td> 
+			<td><a href="#/divide" class="btn btn-primary">/</a></td> 
+
+			</tr>
+			<tr>
+			<td><a href="#/num" class="btn btn-primary" onclick="myFunction(7)">7</a></td>	
+            <td><a href="#/num" class="btn btn-primary" onclick="myFunction(8)">8</a></td>
+            <td><a href="#/num" class="btn btn-primary" onclick="myFunction(9)">9</a></td>
+			<td><a href="#/=" class="btn btn-primary">=</a></td> 
+			 <td><a href="#/new" class="btn btn-primary">Clear</a></td>
+			</tr>
+			<tr>
+			<td></td>
+			<td><a href="#/num" class="btn btn-primary"onclick="myFunction(0)">0</a></td>
+			</tr>
+      
+      </tbody>
+    </table>
+  </script>
+
+
+
+  <script>
+  number =0;
+  x =0;
+  y=0;
+  pulsOrMinus=0;
+  function myFunction(i) {
+  number=i;
+}// gets the number of the clicked item 
+/*
+				var Answers = Backbone.Collection.extend({
+				  url: '/answers'
+				});
+				  var Answer = Backbone.Model.extend({
+				  urlRoot: '/answers'
+				});
+	
+	if you want to store previous answers
+	*/		
+			
+
+
+		
+
+	 var AnswerListView = Backbone.View.extend({
+      el: '.page',
+      render: function () {       
+        var that = this;
+			document.getElementById("answer").innerHTML=x;
+            var template = _.template($('#new-calc-template').html(), {answer: answer});
+            that.$el.html(template);
+       
+      
+      }
+    });
+
+    var answerListView = new AnswerListView();
+
+    
+
+
+    var Router = Backbone.Router.extend({
+        routes: {
+          "": "home",
+		   "new": "new",
+		  "num":"num",
+		  "+":"+",
+		  "-":"-",
+		  "X":"X",
+			  "divide":"divide",
+		  "=":"=",
+		    
+		 
+          
+        }
+    });
+
+    var router = new Router;
+    router.on('route:home', function() {
+      // render user list
+      answerListView.render();
+    })
+	  router.on('route:new', function() {
+      // render user list
+	  number=0;
+	  x =0;
+      answerListView.render();
+    })  
+		 router.on('route:num', function() {
+      // render user list
+	  if(x=='0'){
+	  x= number;
+	 document.getElementById("answer").innerHTML = x;
+     answerListView.render();	 
+	 router.navigate('', {trigger:true});	
+	 }else{
+	 x= x+''+number;
+	document.getElementById("answer").innerHTML = x;
+    answerListView.render();	
+	router.navigate('', {trigger:true});	 
+	 }
+ 
+    })
+	router.on('route:+', function() {
+      // render user list
+	  y=x;
+	  pulsOrMinus=1;
+	  number=0;
+	  x =0;
+      answerListView.render();
+    }) 
+	router.on('route:-', function() {
+      // render user list
+	  
+	  pulsOrMinus=2;
+		y=x;
+	  number=0;
+	  x =0;
+      answerListView.render();
+    })
+	router.on('route:X', function() {
+      // render user list
+
+	  pulsOrMinus=3;
+		y=x;
+	  number=0;
+	  x =0;
+      answerListView.render();
+    })
+	router.on('route:divide', function() {
+      // render user list
+	  pulsOrMinus=4;
+		y=x;
+	  number=0;
+	  x =0;
+      answerListView.render();
+    })
+	router.on('route:=', function() {
+      if( pulsOrMinus=='1'){
+	  x= parseFloat(y) + parseFloat(x);
+	  }
+	  else if(pulsOrMinus=='2'){
+	  x=y-x;
+	  }
+	  else if(pulsOrMinus=='3'){
+	  x=y*x;
+	  }
+	  else if(pulsOrMinus=='4'){
+	  x=y/x;
+	  }
+	  
+      answerListView.render();
+	  number=0;
+	
+	  y=0;
+    }) 
+	
+   
+	
+    Backbone.history.start();
+  </script>
+
+
+</body>
+</html> 
+
