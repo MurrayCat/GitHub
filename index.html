@@ -89,7 +89,7 @@
       el: '.page',
       render: function () {       
         var that = this;
-			document.getElementById("answer").innerHTML=x;
+			
             var template = _.template($('#new-calc-template').html(), {answer: answer});
             that.$el.html(template);
        
@@ -150,6 +150,7 @@
 	  pulsOrMinus=1;
 	  number=0;
 	  x =0;
+	  document.getElementById("answer").innerHTML = "+";
       answerListView.render();
     }) 
 	router.on('route:-', function() {
@@ -159,6 +160,7 @@
 		y=x;
 	  number=0;
 	  x =0;
+	  document.getElementById("answer").innerHTML = "-";
       answerListView.render();
     })
 	router.on('route:X', function() {
@@ -168,6 +170,7 @@
 		y=x;
 	  number=0;
 	  x =0;
+	  document.getElementById("answer").innerHTML = 'X';
       answerListView.render();
     })
 	router.on('route:divide', function() {
@@ -176,6 +179,7 @@
 		y=x;
 	  number=0;
 	  x =0;
+	  document.getElementById("answer").innerHTML = "/";
       answerListView.render();
     })
 	router.on('route:=', function() {
@@ -191,10 +195,10 @@
 	  else if(pulsOrMinus=='4'){
 	  x=y/x;
 	  }
-	  
+	  document.getElementById("answer").innerHTML=x;
       answerListView.render();
 	  number=0;
-	
+	x=0;
 	  y=0;
     }) 
 	
